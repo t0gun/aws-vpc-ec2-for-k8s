@@ -1,16 +1,28 @@
-name: Terraform
+name: Terraform (Manual Workflow)
 
 on:
-  push:
-    branches: [main]
+
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "what do you want to do?"
+        required: true
+        type: choice
+        options: [plan, apply, destroy]
+        default: plan
 
 permissions:
   id-token: write  # needed for OIDC
   contents: read  # needed for checkout
 
+concurrency:
+  group: tf-manual
+  cancel-in-progress: false # important to not mess up with state
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v5.0.0
@@ -23,3 +35,17 @@ jobs:
       - name: Verify AWS Identity
         run: aws sts get-caller-identity
 
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform Plan
+        if: inputs.action == 'plan'
+        run: terraform plan -input=false
+
+      - name: Terraform Apply
+        if: inputs.action == 'apply'
+        run: terraform apply -auto-approve -input=false
+
+      - name: Terraform Destroy
+        if: inputs.action == 'destroy'
+        run: terraform destroy -auto-approve -input=false
