@@ -1,0 +1,25 @@
+name: Terraform
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write  # needed for OIDC
+  contents: read  # needed for checkout
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v5.0.0
+      - name: configure aws credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4.3.1
+        with:
+          role-to-assume: arn:aws:iam::555066115752:role/github-actions
+          aws-region: ca-central-1
+
+      - name: Verify AWS Identity
+        run: aws sts get-caller-identity
+
