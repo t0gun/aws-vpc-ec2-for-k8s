@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: false # important to not mess up with state
 
 jobs:
-  deploy:
+  terraform:
     runs-on: ubuntu-latest
     environment: production
     steps:
