@@ -46,14 +46,14 @@ jobs:
       - name: Terraform Plan
         if: inputs.action == 'plan'
         working-directory: infra
-        run: terraform plan -input=false
+        run: terraform plan -input=false -lock-timeout=5m
 
       - name: Terraform Apply
         if: inputs.action == 'apply'
         working-directory: infra
-        run: terraform apply -auto-approve -input=false
+        run: terraform apply -auto-approve -input=false -lock-timeout=5m
 
       - name: Terraform Destroy
         if: inputs.action == 'destroy'
         working-directory: infra
-        run: terraform destroy -auto-approve -input=false
+        run: terraform destroy -auto-approve -input=false -input=false -lock-timeout=5m
