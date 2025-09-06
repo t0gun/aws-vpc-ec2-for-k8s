@@ -23,6 +23,8 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: production
+    env:
+     TF_VAR_ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v5.0.0
