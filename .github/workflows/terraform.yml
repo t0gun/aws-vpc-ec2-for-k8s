@@ -83,3 +83,4 @@ jobs:
             else
               echo "\`jq\` not found; raw JSON below:" >> $GITHUB_STEP_SUMMARY
               cat infra/tf-outputs.json >> $GITHUB_STEP_SUMMARY    
+          fi
