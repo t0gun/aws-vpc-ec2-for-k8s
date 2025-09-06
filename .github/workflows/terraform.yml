@@ -57,3 +57,27 @@ jobs:
         if: inputs.action == 'destroy'
         working-directory: infra
         run: terraform destroy -auto-approve -input=false -input=false -lock-timeout=5m
+
+      - name: Terraform Outputs JSON
+        if: inputs.action != 'destroy'
+        working-directory: infra
+        run: terraform output -json > tf-outputs.json || echo '{}' > tf-outputs.json
+
+      - name:   Upload outputs artifact
+        if: inputs.action != 'destroy'
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: tf-outputs-${{ github.run_id }}
+          path: infra/tf-outputs.json
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Pretty summary of outputs
+        if: inputs.action != 'destroy'
+        run: |
+            echo "## Terraform Outputs" >> $GITHUB_STEP_SUMMARY
+            if command -v jq >/dev/null 2>&1; then
+              jq -r 'to_entries | .[] | "- **\(.key)**: \(.value.value)"' infra/tf-outputs.json >> $GITHUB_STEP_SUMMARY
+            else
+              echo "\`jq\` not found; raw JSON below:" >> $GITHUB_STEP_SUMMARY
+              cat infra/tf-outputs.json >> $GITHUB_STEP_SUMMARY    
