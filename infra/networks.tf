@@ -1,12 +1,5 @@
-provider "aws" {
-  region = var.region
-}
-
-
-
-################ DEFINE VPC AND SUBNETS
 resource "aws_vpc" "main" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = "10.0.0.0/16" # total private ips you can use in a resource this is about 65,536 IPs
   enable_dns_hostnames = true
   tags = {
     Name = "k8s-vpc"
@@ -33,7 +26,6 @@ resource "aws_subnet" "private" {
 }
 
 
-######## CREATE INTERNET GATEWAY AND NAT GATEWAY
 # Nat allows our private subnets to reach the internet
 # the igw allows resources in the vpc with a public ip to reach the internet
 resource "aws_internet_gateway" "igw" {
@@ -57,7 +49,7 @@ resource "aws_nat_gateway" "nat" {
 
 ### Routing
 resource "aws_route_table" "public" {
-  vpc_id =  aws_vpc.main.id
+  vpc_id = aws_vpc.main.id
   route {
     # route all web traffic to internet gateway, since nat is in this subnet it gets internet access too
     cidr_block = "0.0.0.0/0"
@@ -71,21 +63,18 @@ resource "aws_route_table" "public" {
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
   route {
-    cidr_block = "0.0.0.9/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat.id
   }
 }
 
 # associating subnets with route tables
 resource "aws_route_table_association" "public" {
-  subnet_id = aws_subnet.public.id
+  subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
 }
 
 resource "aws_route_table_association" "private" {
-  subnet_id = aws_subnet.public.id
+  subnet_id      = aws_subnet.private.id
   route_table_id = aws_route_table.private.id
 }
-
-
-
