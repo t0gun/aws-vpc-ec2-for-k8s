@@ -1,2 +1,3 @@
-#### Provisioning AWS VPC, 4 ec2's and public bastion host using terraform with GitHub actions
+# Kubernetes the Hard Way — AWS (Terraform + GitHub Actions)
 
+>This repo provisions the AWS network and the compute needed to help you run [Kelsey Hightower’s *Kubernetes The Hard Way (https://github.com/kelseyhightower/kubernetes-the-hard-way). it only spins upthe infrastructure and does not install the cluster or packages.
