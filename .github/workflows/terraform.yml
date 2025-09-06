@@ -75,12 +75,12 @@ jobs:
           if-no-files-found: error
 
       - name: Pretty summary of outputs
-        if: inputs.action != 'destroy'
+        if: inputs.action == 'apply'
         run: |
-            echo "## Terraform Outputs" >> $GITHUB_STEP_SUMMARY
+            echo "## Terraform Outputs" >> "$GITHUB_STEP_SUMMARY"
             if command -v jq >/dev/null 2>&1; then
-              jq -r 'to_entries | .[] | "- **\(.key)**: \(.value.value)"' infra/tf-outputs.json >> $GITHUB_STEP_SUMMARY
+              jq -r 'to_entries | .[] | "- **\(.key)**: \(.value.value)"' infra/tf-outputs.json >> "$GITHUB_STEP_SUMMARY"
             else
-              echo "\`jq\` not found; raw JSON below:" >> $GITHUB_STEP_SUMMARY
-              cat infra/tf-outputs.json >> $GITHUB_STEP_SUMMARY    
-          fi
+              echo "jq not found; raw JSON below:" >> "$GITHUB_STEP_SUMMARY"
+              cat infra/tf-outputs.json >> "$GITHUB_STEP_SUMMARY"
+            fi
