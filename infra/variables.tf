@@ -27,3 +27,9 @@ variable "ssh_public_key" {
   description = "SSH public key here"
 }
 
+
+variable "k8_node_names" {
+  type = list(string)
+  description = "private ec2 node names for k8s"
+  default = ["k8s-node-1", "k8-nodes-2", "k8s-node-3", "k8s-node-4"]
+}
