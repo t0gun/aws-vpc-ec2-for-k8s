@@ -3,16 +3,16 @@
 This repo provisions the AWS network and compute needed to help you run [Kelsey Hightower’s *Kubernetes The Hard Way*](https://github.com/kelseyhightower/kubernetes-the-hard-way). It only spins up the infrastructure and does not install the cluster or any packages.
 
 ## What this repo provisions
-- VPC with single AZ with one public and one private subnet
-- Internet Gateway for public subnet egress
-- Elastic IP and  NAT Gateway for  private subnet egress
-- Route tables and its associations for public/private subnets
-- Security Groups:
-    - bastion-sg: SSH ingress from `allowed_ssh_cidrs`; egress 80/443; SSH to VPC
-    - private-sg: SSH only from bastion; intra-SG traffic allowed; egress 80/443
-- Bastion EC2 Ubuntu 24.04 in the public subnet, public IP, with SSM agent installed via `user_data`
-- IAM role + instance profile for SSM attached to the bastion
-- Key pair created from your provided public key. ssh public key is read from GitHub secrets.
-- Remote Terraform state** (S3) with DynamoDB state locking
-- GitHub Actions  manual flow work for plan, apply and destroy. 
--  Outputs are saved as an artifact and summarized in the run
+- Single-AZ VPC with one public subnet and one private subnet
+- Internet Gateway for public egress
+- Elastic IP and NAT Gateway for private egress
+- Public and private route tables with associations
+- Bastion security group: SSH from `allowed_ssh_cidrs`, egress on ports 80 and 443
+- Private security group: SSH only from bastion, intra-SG allowed, egress on ports 80 and 443
+- Bastion EC2 (Ubuntu 24.04) in the public subnet with a public IP and SSM agent via `user_data`
+- Four Debian 12 (Bookworm) EC2 instances in the private subnet with SSH access from the bastion only
+- IAM role and instance profile for SSM attached to the bastion
+- Key pair created from your public key, read from GitHub Secrets
+- Remote Terraform state in S3 with DynamoDB locking
+- GitHub Actions workflow for manual plan, apply, and destroy
+- Terraform outputs saved as an artifact and summarized in the run
