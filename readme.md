@@ -7,7 +7,6 @@ This repo provisions the AWS network and compute needed to help you run [Kelsey 
 - Internet Gateway for public egress
 - Elastic IP and NAT Gateway for private egress
 - Public and private route tables with associations
-- Bastion security group: SSH from `allowed_ssh_cidrs`, egress on ports 80 and 443
 - Private security group: SSH only from bastion, intra-SG allowed, egress on ports 80 and 443
 - Bastion EC2 (Ubuntu 24.04) in the public subnet with a public IP and SSM agent via `user_data`
 - Four Debian 12 (Bookworm) EC2 instances in the private subnet with SSH access from the bastion only
@@ -16,6 +15,13 @@ This repo provisions the AWS network and compute needed to help you run [Kelsey 
 - Remote Terraform state in S3 with DynamoDB locking
 - GitHub Actions workflow for manual plan, apply, and destroy
 - Terraform outputs saved as an artifact and summarized in the run
+
+## Security posture
+| Group        | Ingress                              | Egress                            |
+|--------------|--------------------------------------|-----------------------------------|
+| bastion-sg   | SSH 22 from `allowed_ssh_cidrs`      | 80/443 to internet; SSH 22 to VPC |
+| private-sg   | SSH 22 from `bastion-sg`; intra-SG   | 80/443 to internet and ICMP       |
+
 
 
 ![Terraform](https://img.shields.io/badge/Terraform-7B42BC?logo=terraform&logoColor=white)
