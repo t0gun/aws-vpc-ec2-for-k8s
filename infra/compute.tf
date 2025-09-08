@@ -36,4 +36,39 @@ EOF
 }
 
 
-# private instance for k8 nodes 4 Debian book worm that is free in canada ca central 1
+# private instance for k8 nodes 4 Debian 12 book worm that is free in canada ca central 1
+
+data "aws_ami" "debian_amd64" {
+  most_recent = true
+  owners      = ["136693071363"] # Debian
+
+  filter {
+    name   = "name"
+    values = ["debian-12-amd64-*"]
+  }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+}
+
+resource "aws_instance" "k8s_node" {
+  count                       = length(var.k8_node_names)
+  ami                         = data.aws_ami.debian_amd64.id
+  instance_type               = var.instance_type
+  subnet_id                   = aws_subnet.private.id
+  vpc_security_group_ids      = [aws_security_group.private.id]
+  key_name                    = aws_key_pair.main.key_name
+  associate_public_ip_address = false
+
+  tags = {
+    Name = var.k8_node_names[count.index]
+    Role = "k8s-node"
+  }
+}
+

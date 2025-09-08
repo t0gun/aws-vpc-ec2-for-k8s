@@ -1,5 +1,5 @@
 output "vpc_id" {
-  value =  aws_vpc.main.id
+  value = aws_vpc.main.id
 }
 
 output "public_subnet_id" {
@@ -10,7 +10,7 @@ output "private_subnet_id" {
   value = aws_subnet.private.id
 }
 output "bastion_id" {
-  value =  aws_instance.bastion.id
+  value = aws_instance.bastion.id
 }
 
 output "bastion_public_ip" {
@@ -23,4 +23,14 @@ output "iam_role_name" {
 
 output "iam_instance_profile_arn" {
   value = aws_iam_instance_profile.ssm.arn
+}
+
+output "k8_nodes-private_ips" {
+  description = "MAP: node name to private ips"
+  value = zipmap(var.k8_node_names, aws_instance.k8s_node[*].private_ip)
+}
+
+output "k8-nodes_ids" {
+  description = "Map: Node name to instance id"
+  value = zipmap(var.k8_node_names, aws_instance.k8s_node[*].id)
 }
