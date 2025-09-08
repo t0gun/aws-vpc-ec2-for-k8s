@@ -16,3 +16,8 @@ This repo provisions the AWS network and compute needed to help you run [Kelsey 
 - Remote Terraform state in S3 with DynamoDB locking
 - GitHub Actions workflow for manual plan, apply, and destroy
 - Terraform outputs saved as an artifact and summarized in the run
+
+
+![Terraform](https://img.shields.io/badge/Terraform-7B42BC?logo=terraform&logoColor=white)
+![GitHub%20Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-232F3E?logo=amazonaws&logoColor=white)
