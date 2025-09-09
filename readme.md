@@ -29,3 +29,6 @@ install the cluster or any packages.
 [![Terraform](https://img.shields.io/badge/Terraform-7B42BC?logo=terraform&logoColor=white)](https://www.terraform.io/)
 [![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)](https://github.com/features/actions)
 [![AWS](https://img.shields.io/badge/AWS-232F3E?logo=amazonaws&logoColor=white)](https://aws.amazon.com/)
+
+## Architecture
+![KTHW AWS architecture (single-AZ VPC, bastion, private Debian nodes)](docs/tf-kthwdrawio.png)
