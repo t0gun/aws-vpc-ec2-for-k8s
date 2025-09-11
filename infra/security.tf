@@ -1,5 +1,3 @@
-
-
 ## private instance security group allow internal traffic and restricted egress
 resource "aws_security_group" "private" {
   name        = "private-sg"
@@ -20,6 +18,7 @@ resource "aws_security_group" "private" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
     from_port   = 80
     to_port     = 80
